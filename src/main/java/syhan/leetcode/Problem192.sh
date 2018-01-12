@@ -1,0 +1,2 @@
+# Read from the file words.txt and output the word frequency list to stdout.
+cat words.txt | sed -r 's/^[ \t]*//' | sed -r 's/ *$//' | sed -r 's/(\s+)/ /g' | tr ' ' '\n' | sort | uniq -c | sort -r | sed -r 's/^\s+(.+)\s+(.+)$/\2 \1/g'

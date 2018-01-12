@@ -1,8 +1,8 @@
 package syhan.leetcode;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * https://leetcode.com/problems/add-two-numbers/description/
+ */
 public class Problem2 {
 
     public static void main(String[] args) {
@@ -27,23 +27,17 @@ public class Problem2 {
     }
 
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        List<Integer> result = new ArrayList<>();
-
-        List<Integer> list1 = toList(l1, new ArrayList<>());
-        List<Integer> list2 = toList(l2, new ArrayList<>());
-
-        if (list1.size() < list2.size()) {
-            List<Integer> temp = list2;
-            list2 = list1;
-            list1 = temp;
-        }
-
         boolean carry = false;
-        for(int i = 0; i < list1.size(); i++) {
-            Integer v1 = list1.get(i);
-            Integer v2 = (i <= list2.size() - 1) ? list2.get(i) : 0;
+        ListNode node = new ListNode(0);
+        ListNode curr = node;
+        ListNode l = l1;
+        ListNode r = l2;
+        while (l != null || r != null) {
+            int v1 = l != null ? l.val : 0;
+            int v2 = r != null ? r.val : 0;
 
-            Integer sum = v1 + v2 + (carry ? 1 : 0);
+            int sum = v1 + v2 + (carry ? 1 : 0);
+
             if (sum > 9) {
                 sum = sum - 10;
                 carry = true;
@@ -51,37 +45,18 @@ public class Problem2 {
                 carry = false;
             }
 
-            result.add(sum);
-        }
+            curr.next = new ListNode(sum);
+            curr = curr.next;
 
+            if (l != null) l = l.next;
+            if (r != null) r = r.next;
+
+        }
         if (carry) {
-            result.add(1);
+            curr.next = new ListNode(1);
         }
 
-        return toNode(result, new ListNode(0));
-    }
-
-    private List<Integer> toList(ListNode node, List<Integer> acc) {
-        if (node == null) {
-            return acc;
-        }
-
-        acc.add(node.val);
-        return toList(node.next, acc);
-    }
-
-    private ListNode toNode(List<Integer> list, ListNode acc) {
-        if (list.isEmpty()) {
-            return null;
-        }
-
-        Integer val = list.get(0);
-        List<Integer> left = list.subList(1, list.size());
-
-        acc.val = val;
-        acc.next = toNode(left, new ListNode(0));
-
-        return acc;
+        return node.next;
     }
 
     private void prettyPrint(ListNode node) {
